@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "276140295444",
+    "firebase_url": "https://anihub-64e55-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "anihub-64e55",
+    "storage_bucket": "anihub-64e55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276140295444:android:c5de81c36496c0f23b6e01",
+        "android_client_info": {
+          "package_name": "com.example.AniHub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276140295444-bl9gm2sv2fjm4bmlisikqtqb2dh1g6i1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpGOiedpPwx5Tf8OQH5cz_Zt8UutrIuaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276140295444-bl9gm2sv2fjm4bmlisikqtqb2dh1g6i1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
