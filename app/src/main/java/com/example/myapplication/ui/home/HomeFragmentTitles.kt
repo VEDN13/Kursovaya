@@ -40,7 +40,6 @@ class HomeFragmentTitles : Fragment() {
         swipeRefreshLayout.setOnRefreshListener {
             fetchLinksFromFirestore()
         }
-
         fetchLinksFromFirestore() // Initial data load
     }
 
