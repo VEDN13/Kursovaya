@@ -1,4 +1,6 @@
 package com.example.myapplication.ui.home
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
+import android.widget.ImageView
+import androidx.core.view.ViewCompat
+import com.bumptech.glide.Glide
 
 class HomeFragmentTitles : Fragment() {
 
@@ -17,11 +22,13 @@ class HomeFragmentTitles : Fragment() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private val db = FirebaseFirestore.getInstance()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_home_sound, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,13 +36,14 @@ class HomeFragmentTitles : Fragment() {
 
         blocksContainer = view.findViewById(R.id.blocksContainer)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-
+        blocksContainer.setPadding(0, 100, 0, 150)
         swipeRefreshLayout.setOnRefreshListener {
             fetchLinksFromFirestore()
         }
 
         fetchLinksFromFirestore() // Initial data load
     }
+
 
     private fun fetchLinksFromFirestore() {
         swipeRefreshLayout.isRefreshing = true // Show loading indicator
@@ -45,13 +53,17 @@ class HomeFragmentTitles : Fragment() {
             .addOnSuccessListener { documents ->
                 blocksContainer.removeAllViews() // Clear current views
                 for (document in documents) {
+                    val imageNotFound = "https://firebasestorage.googleapis.com/v0/b/anihub-64e55.appspot.com/o/Photos%2F404%20not%20found.jpg?alt=media&token=99b0fbda-a13f-4334-a61a-864e8bac914d"
                     val title_name = document.getString("title_name") ?: "No Title"
                     val title_episodes = document.getString("title_episodes") ?: "?"
+                    var imageUrl = document.getString("photo_link") ?: imageNotFound // Fetch image URL
+                    if (imageUrl == "") { imageUrl = imageNotFound}
 
-                    addBlock(title_name, title_episodes)
+
+                    addBlock(title_name, title_episodes, imageUrl)
                 }
             }
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 // Handle error
             }
             .addOnCompleteListener {
@@ -59,23 +71,58 @@ class HomeFragmentTitles : Fragment() {
             }
     }
 
-    private fun addBlock(title_name: String, title_episodes: String) {
-        val textView = TextView(requireContext()).apply {
+    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
+    private fun addBlock(title_name: String, title_episodes: String, imageUrl: String) {
+
+        val blockLayout = LinearLayout(requireContext()).apply {
+
+            orientation = LinearLayout.HORIZONTAL
+
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            setPadding(50, 50, 50, 50)
-            text = title_name
-            textSize = 17f
-            isClickable = true
 
+            background = requireContext().getDrawable(R.drawable.border_background)
+            setPadding(10, 50, 80, 50)
+            isClickable = true
             setOnClickListener {
                 openLink(title_name)
             }
         }
 
-        blocksContainer.addView(textView)
+        val imageView = ImageView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(200, 200)
+        }
+        // Use Glide to load the image from Firebase URL
+        Glide.with(this).load(imageUrl).into(imageView)
+
+        val textContainer = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+        }
+
+        val titleTextView = TextView(requireContext()).apply {
+            text = title_name
+            textSize = 17f
+        }
+
+        val episodesTextView = TextView(requireContext()).apply {
+            text = "Эпизодов: $title_episodes"
+            textSize = 14f
+        }
+
+        textContainer.addView(titleTextView)
+        textContainer.addView(episodesTextView)
+
+        blockLayout.addView(imageView)
+        blockLayout.addView(textContainer)
+
+        blocksContainer.addView(blockLayout)
     }
 
     private fun openLink(title_name: String) {

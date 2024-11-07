@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
 
         blocksContainer = view.findViewById(R.id.blocksContainer)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-
+        blocksContainer.setPadding(0, 100, 0, 150)
         swipeRefreshLayout.setOnRefreshListener {
             fetchLinksFromFirestore()
 
