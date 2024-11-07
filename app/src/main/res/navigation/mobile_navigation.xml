@@ -3,14 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/HomeFragmentTitles">
+
+    <!-- Главная страница (Фрагмент с титулами) -->
+    <fragment
+        android:id="@+id/HomeFragmentTitles"
+        android:name="com.example.myapplication.ui.home.HomeFragmentTitles"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragmentTitles_to_homeFragment"
+            app:destination="@id/HomeFragment" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/HomeFragment"
         android:name="com.example.myapplication.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:label="@string/title_home_details"
+        tools:layout="@layout/fragment_home_details" />
 
+    <!-- Другие фрагменты -->
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.myapplication.ui.dashboard.DashboardFragment"

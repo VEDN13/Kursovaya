@@ -2,5 +2,6 @@
     <string name="app_name">AniHub</string>
     <string name="title_home">Последние</string>
     <string name="title_dashboard">В разработке</string>
-    <string name="title_notifications">Уведомления</string>
+    <string name="title_notifications">В разработке</string>
+    <string name="title_home_details">Выберете перевод</string>
 </resources>

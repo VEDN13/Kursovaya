@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,7 +25,12 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home_sound, container, false)
+        val view = inflater.inflate(R.layout.fragment_home_sound, container, false)
+
+        // Получаем аргумент title_name, если он был передан
+        val titleName = arguments?.getString("title_name")
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,6 +41,10 @@ class HomeFragment : Fragment() {
 
         swipeRefreshLayout.setOnRefreshListener {
             fetchLinksFromFirestore()
+
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                findNavController().navigateUp()
+            }
         }
 
         fetchLinksFromFirestore() // Первоначальная загрузка данных
@@ -41,8 +52,10 @@ class HomeFragment : Fragment() {
 
     private fun fetchLinksFromFirestore() {
         swipeRefreshLayout.isRefreshing = true // Показать индикатор загрузки
+        val titleName = arguments?.getString("title_name")
 
-        db.collection("sound") // Замените на имя вашей коллекции
+        db.collection("Dubbing") // Замените на имя вашей коллекции
+            .whereEqualTo("title", titleName)
             .get()
             .addOnSuccessListener { documents ->
                 blocksContainer.removeAllViews() // Очистить текущие элементы
@@ -68,19 +81,17 @@ class HomeFragment : Fragment() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            //background = resources.getDrawable(R.drawable.custom_selectable_background, null) // Задайте фоновый ресурс
-            setPadding(20, 20, 20, 20)
+            setPadding(50, 50, 50, 50)
             text = title
+            textSize = 17f
             isClickable = true
 
             // Установка изображения в зависимости от типа
             when (type) {
-                "dub" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.dub, 0)
-                "sub" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.sub, 0)
-                "mvo" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.mvo, 0)
-                "vo" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vo, 0)
-                // Добавьте другие типы при необходимости
-                //else -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.default_icon, 0) // Иконка по умолчанию
+                "dub", "DUB" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.dub, 0)
+                "sub", "SUB" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.sub, 0)
+                "mvo", "MVO" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.mvo, 0)
+                "vo", "VO" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vo, 0)
             }
 
             setOnClickListener {
