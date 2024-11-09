@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.home
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.ImageView
-import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
 
 class HomeFragmentTitles : Fragment() {
@@ -57,9 +55,10 @@ class HomeFragmentTitles : Fragment() {
                     val title_episodes = document.getString("title_episodes") ?: "?"
                     var imageUrl = document.getString("photo_link") ?: imageNotFound // Fetch image URL
                     if (imageUrl == "") { imageUrl = imageNotFound}
+                    val title_status = document.getString("title_status") ?: ""
 
 
-                    addBlock(title_name, title_episodes, imageUrl)
+                    addBlock(title_name, title_episodes, imageUrl, title_status)
                 }
             }
             .addOnFailureListener {
@@ -71,7 +70,7 @@ class HomeFragmentTitles : Fragment() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
-    private fun addBlock(title_name: String, title_episodes: String, imageUrl: String) {
+    private fun addBlock(title_name: String, title_episodes: String, imageUrl: String, title_status: String) {
 
         val blockLayout = LinearLayout(requireContext()).apply {
 
@@ -91,7 +90,7 @@ class HomeFragmentTitles : Fragment() {
         }
 
         val imageView = ImageView(requireContext()).apply {
-            layoutParams = LinearLayout.LayoutParams(200, 200)
+            layoutParams = LinearLayout.LayoutParams(350, 350)
         }
         // Use Glide to load the image from Firebase URL
         Glide.with(this).load(imageUrl).into(imageView)
@@ -114,8 +113,13 @@ class HomeFragmentTitles : Fragment() {
             text = "Эпизодов: $title_episodes"
             textSize = 14f
         }
+        val statusTextView = TextView(requireContext()).apply {
+            text = title_status
+            textSize = 14f
+        }
 
         textContainer.addView(titleTextView)
+        textContainer.addView(statusTextView)
         textContainer.addView(episodesTextView)
 
         blockLayout.addView(imageView)
@@ -129,9 +133,7 @@ class HomeFragmentTitles : Fragment() {
             putString("title_name", title_name)
         }
 
-        // Используйте NavController для навигации
-        findNavController().navigate(R.id.action_homeFragmentTitles_to_homeFragment, bundle)
-
+            // Используйте NavController для навигации
+            findNavController().navigate(R.id.action_homeFragmentTitles_to_homeFragment, bundle)
     }
-
 }
