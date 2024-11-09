@@ -1,17 +1,37 @@
 package com.example.myapplication
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    // Register a permission launcher for notification permission on Android 13+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission granted; send a notification
+            sendNotification("Permission Granted", "Now you can receive notifications!")
+        } else {
+            // Handle permission denial
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,8 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
+        // Set up top-level destinations for BottomNavigationView
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.HomeFragmentTitles, R.id.navigation_dashboard, R.id.navigation_notifications
@@ -30,10 +50,56 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        createNotificationChannel()  // Create notification channel
+
+        // Check for notification permission on Android 13+ and request if not granted
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                // Permission is already granted; send a notification
+                sendNotification("Welcome", "You already have notification permission!")
+            }
+        } else {
+            // For Android versions below 13, send notification directly
+            sendNotification("Welcome", "Notifications are enabled!")
+        }
     }
+
+    // Create notification channel for Android 8.0 and above
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "default_channel",
+                "Default Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "This is the default notification channel"
+            }
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    // Function to send a notification
+    private fun sendNotification(title: String, content: String) {
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        val notification = NotificationCompat.Builder(this, "default_channel")
+            .setSmallIcon(R.drawable.frame_1) // Use your app's notification icon here
+            .setContentTitle(title)
+            .setContentText(content)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+        notificationManager.notify(1, notification)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
 }
