@@ -7,7 +7,7 @@ plugins {
 
 
 android {
-    namespace = "com.example.AniHub"
+    namespace = "com.example.myapplication"
     compileSdk = 34
 
     defaultConfig {
