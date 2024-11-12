@@ -56,9 +56,9 @@ class HomeFragmentTitles : Fragment() {
                     var imageUrl = document.getString("photo_link") ?: imageNotFound // Fetch image URL
                     if (imageUrl == "") { imageUrl = imageNotFound}
                     val title_status = document.getString("title_status") ?: ""
+                    val title_description = document.getString("title_description") ?: ""
 
-
-                    addBlock(title_name, title_episodes, imageUrl, title_status)
+                    addBlock(title_name, title_episodes, imageUrl, title_status, title_description)
                 }
             }
             .addOnFailureListener {
@@ -70,7 +70,7 @@ class HomeFragmentTitles : Fragment() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
-    private fun addBlock(title_name: String, title_episodes: String, imageUrl: String, title_status: String) {
+    private fun addBlock(title_name: String, title_episodes: String, imageUrl: String, title_status: String, title_description: String) {
 
         val blockLayout = LinearLayout(requireContext()).apply {
 
@@ -90,7 +90,7 @@ class HomeFragmentTitles : Fragment() {
         }
 
         val imageView = ImageView(requireContext()).apply {
-            layoutParams = LinearLayout.LayoutParams(350, 350)
+            layoutParams = LinearLayout.LayoutParams(400, 400)
         }
         // Use Glide to load the image from Firebase URL
         Glide.with(this).load(imageUrl).into(imageView)
@@ -117,10 +117,15 @@ class HomeFragmentTitles : Fragment() {
             text = title_status
             textSize = 14f
         }
+        val descriptionTextView = TextView(requireContext()).apply {
+            text = title_description
+            textSize = 14f
+        }
 
         textContainer.addView(titleTextView)
         textContainer.addView(statusTextView)
         textContainer.addView(episodesTextView)
+        textContainer.addView(descriptionTextView)
 
         blockLayout.addView(imageView)
         blockLayout.addView(textContainer)
