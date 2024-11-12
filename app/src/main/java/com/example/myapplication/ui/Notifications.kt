@@ -13,7 +13,7 @@ class MyApplication : Application() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "default_channel",
-                "Default Channel",
+                "default_channel",
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "This is the default notification channel"

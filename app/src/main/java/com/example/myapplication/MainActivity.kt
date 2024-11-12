@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     ) { isGranted: Boolean ->
         if (isGranted) {
             // Permission granted; send a notification
-            sendNotification("Permission Granted", "Now you can receive notifications!")
+            sendNotification("Спасибо!", "Теперь мы можем вам писать!)")
         } else {
             // Handle permission denial
         }
@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
-        // Set up top-level destinations for BottomNavigationView
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.HomeFragmentTitles, R.id.navigation_dashboard, R.id.navigation_notifications
@@ -51,9 +50,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        createNotificationChannel()  // Create notification channel
+        createNotificationChannel()
 
-        // Check for notification permission on Android 13+ and request if not granted
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -61,13 +59,7 @@ class MainActivity : AppCompatActivity() {
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            } else {
-                // Permission is already granted; send a notification
-                sendNotification("Welcome", "You already have notification permission!")
             }
-        } else {
-            // For Android versions below 13, send notification directly
-            sendNotification("Welcome", "Notifications are enabled!")
         }
     }
 
@@ -90,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     private fun sendNotification(title: String, content: String) {
         val notificationManager = getSystemService(NotificationManager::class.java)
         val notification = NotificationCompat.Builder(this, "default_channel")
-            .setSmallIcon(R.drawable.frame_1) // Use your app's notification icon here
+            .setSmallIcon(R.drawable.frame_1)
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

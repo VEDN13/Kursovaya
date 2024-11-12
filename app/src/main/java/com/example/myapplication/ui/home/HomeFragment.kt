@@ -1,7 +1,5 @@
 package com.example.myapplication.ui.home
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +26,7 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home_sound, container, false)
 
         // Получаем аргумент title_name, если он был передан
-        val titleName = arguments?.getString("title_name")
+        arguments?.getString("title_name")
 
         return view
     }
@@ -67,7 +65,7 @@ class HomeFragment : Fragment() {
                     addBlock(title, link, type)
                 }
             }
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 // Обработка ошибки
             }
             .addOnCompleteListener {
@@ -103,9 +101,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun openLink(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(url)
+        val bundle = Bundle().apply {
+            putString("url", url)
         }
-        startActivity(intent)
+        findNavController().navigate(R.id.webViewFragment, bundle)
     }
+
 }

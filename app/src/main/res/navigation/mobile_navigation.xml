@@ -34,4 +34,11 @@
         android:name="com.example.myapplication.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.example.myapplication.ui.webview.WebViewFragment"
+        android:label="WebView"
+        tools:layout="@layout/fragment_webview" />
+
 </navigation>
