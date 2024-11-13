@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.home
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,7 @@ class HomeFragmentTitles : Fragment() {
         swipeRefreshLayout.setOnRefreshListener {
             fetchLinksFromFirestore()
         }
+
         fetchLinksFromFirestore() // Initial data load
     }
 
@@ -118,8 +120,9 @@ class HomeFragmentTitles : Fragment() {
             textSize = 14f
         }
         val descriptionTextView = TextView(requireContext()).apply {
-            text = title_description
-            textSize = 14f
+            text = "\n $title_description"
+            setTextColor(Color.GRAY)
+            textSize = 10f
         }
 
         textContainer.addView(titleTextView)

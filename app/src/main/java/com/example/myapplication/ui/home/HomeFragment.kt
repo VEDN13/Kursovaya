@@ -57,12 +57,18 @@ class HomeFragment : Fragment() {
             .get()
             .addOnSuccessListener { documents ->
                 blocksContainer.removeAllViews() // Очистить текущие элементы
-                for (document in documents) {
-                    val title = document.getString("studio") ?: "Без названия"
-                    val link = document.getString("link") ?: ""
-                    val type = document.getString("type") ?: ""
 
-                    addBlock(title, link, type)
+                if (documents.isEmpty) {
+                    // Если документов нет, переходим на NotFoundFragment
+                    findNavController().navigate(R.id.NotFoundFragment)
+                } else {
+                    for (document in documents) {
+                        val title = document.getString("studio") ?: "Без названия"
+                        val link = document.getString("link") ?: ""
+                        val type = document.getString("type") ?: ""
+
+                        addBlock(title, link, type)
+                    }
                 }
             }
             .addOnFailureListener {

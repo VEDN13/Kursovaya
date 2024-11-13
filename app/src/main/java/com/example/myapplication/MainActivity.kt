@@ -92,6 +92,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        return navController.navigateUp() || super.onSupportNavigateUp()
+        val currentDestination = navController.currentDestination
+
+        return if (currentDestination?.id == R.id.NotFoundFragment) {
+            navController.navigate(R.id.HomeFragmentTitles)
+            true
+        } else {
+            navController.navigateUp() || super.onSupportNavigateUp()
+        }
     }
 }
