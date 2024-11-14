@@ -1,5 +1,4 @@
 package com.example.myapplication.ui.home
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
-
 class HomeFragment : Fragment() {
 
     private lateinit var blocksContainer: LinearLayout
@@ -25,7 +23,6 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home_sound, container, false)
 
-        // Получаем аргумент title_name, если он был передан
         arguments?.getString("title_name")
 
         return view
@@ -44,7 +41,6 @@ class HomeFragment : Fragment() {
                 findNavController().navigateUp()
             }
         }
-
         fetchLinksFromFirestore() // Первоначальная загрузка данных
     }
 
@@ -66,8 +62,8 @@ class HomeFragment : Fragment() {
                         val title = document.getString("studio") ?: "Без названия"
                         val link = document.getString("link") ?: ""
                         val type = document.getString("type") ?: ""
-
-                        addBlock(title, link, type)
+                        val episodes = document.getString("title_episodes") ?: "?/?"
+                        addBlock(title, link, type, episodes)
                     }
                 }
             }
@@ -79,30 +75,28 @@ class HomeFragment : Fragment() {
             }
     }
 
-    private fun addBlock(title: String, link: String, type: String) {
+    private fun addBlock(title: String, link: String, type: String, episodes: String) {
         val textView = TextView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             setPadding(50, 50, 50, 50)
-            text = title
+            text = title + "  •  " + episodes + " эп."
             textSize = 17f
             isClickable = true
 
             // Установка изображения в зависимости от типа
-            when (type) {
-                "dub", "DUB" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.dub, 0)
-                "sub", "SUB" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.sub, 0)
-                "mvo", "MVO" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.mvo, 0)
-                "vo", "VO" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vo, 0)
+            when (type.lowercase()) {
+                "dub" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.dub, 0)
+                "sub" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.sub, 0)
+                "mvo" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.mvo, 0)
+                "vo" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vo, 0)
             }
-
             setOnClickListener {
                 openLink(link)
             }
         }
-
         blocksContainer.addView(textView)
     }
 
@@ -112,5 +106,4 @@ class HomeFragment : Fragment() {
         }
         findNavController().navigate(R.id.webViewFragment, bundle)
     }
-
 }
