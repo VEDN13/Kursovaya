@@ -55,7 +55,7 @@ class HomeFragmentTitles : Fragment() {
                     if (imageUrl == "") { imageUrl = imageNotFound}
                     var title_status = document.getString("title_status") ?: ""
                     if (title_status == "ongoing") { title_status = "Онгоинг"}
-                    if (title_status == "realesed") { title_status = "Вышел"}
+                    if (title_status == "released") { title_status = "Вышел"}
                     val title_description = document.getString("title_description") ?: ""
 
                     addBlock(title_name, title_episodes, imageUrl, title_status, title_description)

@@ -59,10 +59,10 @@ class HomeFragment : Fragment() {
                     findNavController().navigate(R.id.NotFoundFragment)
                 } else {
                     for (document in documents) {
-                        val title = document.getString("studio") ?: "Без названия"
+                        val title = document.getString("dub_title") ?: "Без названия"
                         val link = document.getString("link") ?: ""
                         val type = document.getString("type") ?: ""
-                        val episodes = document.getString("title_episodes") ?: "?/?"
+                        val episodes = document.getString("last_episode") ?: "?"
                         addBlock(title, link, type, episodes)
                     }
                 }
