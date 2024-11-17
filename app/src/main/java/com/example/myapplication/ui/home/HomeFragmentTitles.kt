@@ -68,17 +68,19 @@ class HomeFragmentTitles : Fragment() {
             }
     }
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
-    private fun addBlock(title_name: String, title_episodes: String, imageUrl: String, title_status: String, title_description: String) {
-
+    private fun addBlock(
+        title_name: String,
+        title_episodes: String,
+        imageUrl: String,
+        title_status: String,
+        title_description: String
+    ) {
         val blockLayout = LinearLayout(requireContext()).apply {
-
             orientation = LinearLayout.HORIZONTAL
-
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-
             background = requireContext().getDrawable(R.drawable.border_background)
             setPadding(10, 50, 80, 50)
             isClickable = true
@@ -111,14 +113,28 @@ class HomeFragmentTitles : Fragment() {
             text = "$title_episodes эп."
             textSize = 14f
         }
+
         val statusTextView = TextView(requireContext()).apply {
             text = title_status
             textSize = 14f
         }
+
+        val shortDescription = getShortDescription(title_description, 2)
+        val isDescriptionShortened = title_description != shortDescription
+
         val descriptionTextView = TextView(requireContext()).apply {
-            text = "\n $title_description"
+            text = shortDescription
             setTextColor(Color.GRAY)
             textSize = 11f
+            setOnClickListener {
+                if (isDescriptionShortened) {
+                    if (text == shortDescription) {
+                        text = title_description // Показываем полное описание
+                    } else {
+                        text = shortDescription // Возвращаем сокращённое
+                    }
+                }
+            }
         }
 
         textContainer.addView(titleTextView)
@@ -129,12 +145,20 @@ class HomeFragmentTitles : Fragment() {
         blockLayout.addView(imageView)
         blockLayout.addView(textContainer)
         blocksContainer.addView(blockLayout)
+
+    }
+    private fun getShortDescription(text: String, maxSentences: Int): String {
+        val sentences = text.split(". ").filter { it.isNotEmpty() }
+        return if (sentences.size <= maxSentences) {
+            text
+        } else {
+            sentences.take(maxSentences).joinToString(". ") + "..."
+        }
     }
     private fun openLink(title_name: String) {
         val bundle = Bundle().apply {
             putString("title_name", title_name)
         }
-
             // Используйте NavController для навигации
             findNavController().navigate(R.id.action_homeFragmentTitles_to_homeFragment, bundle)
     }
