@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.webview
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,10 +36,12 @@ class WebViewFragment : Fragment() {
         webView = view.findViewById(R.id.webView)
         customViewContainer = view.findViewById(R.id.fullscreen_container)
         webView.settings.javaScriptEnabled = true
+        webView.settings.domStorageEnabled = true
+        webView.settings.mediaPlaybackRequiresUserGesture = false
         webView.webViewClient = WebViewClient()
 
-        // Получаем нижнюю панель навигации (если она есть в activity)
-        bottomNavigationView = activity?.findViewById(R.id.bottom_nav_menu)
+        // Получаем BottomNavigationView из активности
+        bottomNavigationView = activity?.findViewById(R.id.nav_view)
 
         // Настройка WebChromeClient для полноэкранного режима
         webChromeClient = object : WebChromeClient() {
@@ -48,46 +51,37 @@ class WebViewFragment : Fragment() {
                     return
                 }
 
-                // Сохраняем текущее состояние и переходим в полноэкранный режим
                 customView = view
                 customViewContainer.addView(customView)
                 customViewContainer.visibility = View.VISIBLE
                 webView.visibility = View.GONE
 
-                // Сохраняем текущее состояние системного UI
                 originalSystemUiVisibility = requireActivity().window.decorView.systemUiVisibility
-
-                // Переход в полноэкранный режим и скрытие нижней панели навигации
                 requireActivity().window.decorView.systemUiVisibility = (
                         View.SYSTEM_UI_FLAG_FULLSCREEN
                                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                         )
 
-                // Скрываем BottomNavigationView
                 bottomNavigationView?.visibility = View.GONE
+                Log.d("WebViewFragment", "Entered fullscreen mode")
             }
 
             override fun onHideCustomView() {
-                // Выход из полноэкранного режима, показываем WebView и нижнюю панель
                 customViewContainer.removeView(customView)
                 customView = null
                 customViewContainer.visibility = View.GONE
                 webView.visibility = View.VISIBLE
 
-                // Восстанавливаем исходное состояние системного UI
                 requireActivity().window.decorView.systemUiVisibility = originalSystemUiVisibility
-
-                // Показываем BottomNavigationView обратно
                 bottomNavigationView?.visibility = View.VISIBLE
+                Log.d("WebViewFragment", "Exited fullscreen mode")
             }
         }
         webView.webChromeClient = webChromeClient
 
         // Загружаем URL, переданный во фрагменте
-        val url = arguments?.getString("url")
-        if (url != null) {
-            webView.loadUrl(url)
-        }
+        val url = arguments?.getString("url") ?: "https://example.com"
+        webView.loadUrl(url)
     }
 }

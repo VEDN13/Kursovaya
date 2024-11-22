@@ -5,7 +5,7 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@id/HomeFragmentTitles">
 
-    <!-- Главная страница (Фрагмент с титулами) -->
+    <!-- Главная страница -->
     <fragment
         android:id="@+id/HomeFragmentTitles"
         android:name="com.example.myapplication.ui.home.HomeFragmentTitles"
@@ -16,11 +16,23 @@
             app:destination="@id/HomeFragment" />
     </fragment>
 
+    <!-- Детальный экран -->
     <fragment
         android:id="@+id/HomeFragment"
         android:name="com.example.myapplication.ui.home.HomeFragment"
         android:label="Выберете перевод"
         tools:layout="@layout/fragment_home_details" />
+
+    <!-- WebViewFragment -->
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.example.myapplication.ui.webview.WebViewFragment"
+        android:label="Kodik"
+        tools:layout="@layout/fragment_webview">
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
 
     <!-- Другие фрагменты -->
     <fragment
@@ -36,13 +48,7 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/webViewFragment"
-        android:name="com.example.myapplication.ui.webview.WebViewFragment"
-        android:label="Kodik"
-        tools:layout="@layout/fragment_webview" />
-    <fragment
         android:id="@+id/NotFoundFragment"
         android:name="com.example.myapplication.ui.home.NotFoundFragment"
         android:label="404" />
-
 </navigation>

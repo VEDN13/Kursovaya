@@ -2,5 +2,4 @@
 <resources>
     <item name="text_dashboard" type="id" />
     <item name="NotFoundFragment" type="id" />
-    <item name="bottom_nav_menu" type="id" />
 </resources>
