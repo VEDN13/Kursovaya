@@ -26,7 +26,7 @@
     <!-- WebViewFragment -->
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.example.myapplication.ui.webview.WebViewFragment"
+        android:name="com.example.myapplication.ui.home.WebViewFragment"
         android:label="Kodik"
         tools:layout="@layout/fragment_webview">
         <argument

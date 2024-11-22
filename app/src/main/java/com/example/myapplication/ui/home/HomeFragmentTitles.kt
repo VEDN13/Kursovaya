@@ -14,6 +14,7 @@ import com.example.myapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.Query
 
 class HomeFragmentTitles : Fragment() {
 
@@ -33,7 +34,7 @@ class HomeFragmentTitles : Fragment() {
 
         blocksContainer = view.findViewById(R.id.blocksContainer)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        blocksContainer.setPadding(0, 100, 0, 150)
+        blocksContainer.setPadding(0, 80, 0, 150)
         swipeRefreshLayout.setOnRefreshListener {
             fetchLinksFromFirestore()
         }
@@ -128,10 +129,10 @@ class HomeFragmentTitles : Fragment() {
             textSize = 11f
             setOnClickListener {
                 if (isDescriptionShortened) {
-                    if (text == shortDescription) {
-                        text = title_description // Показываем полное описание
+                    text = if (text == shortDescription) {
+                        title_description // Показываем полное описание
                     } else {
-                        text = shortDescription // Возвращаем сокращённое
+                        shortDescription // Возвращаем сокращённое
                     }
                 }
             }

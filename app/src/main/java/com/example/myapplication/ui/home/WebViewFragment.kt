@@ -1,5 +1,6 @@
-package com.example.myapplication.ui.webview
+package com.example.myapplication.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class WebViewFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_webview, container, false)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
