@@ -89,9 +89,10 @@ class HomeFragment : Fragment() {
             // Установка изображения в зависимости от типа
             when (type.lowercase()) {
                 "dub" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.dub, 0)
-                "sub" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.sub, 0)
+                "sub", "subtitles" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.sub, 0)
                 "mvo" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.mvo, 0)
                 "vo" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vo, 0)
+                "voice" -> setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.voice, 0)
             }
             setOnClickListener {
                 openLink(link)
